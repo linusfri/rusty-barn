@@ -14,6 +14,7 @@ let
   devDeps = buildDeps // {
     inherit (pkgs) rustup;
     inherit (pkgs) cargo-watch;
+    inherit (pkgs) gh;
   };
 
   containerRuntimeDeps = {
