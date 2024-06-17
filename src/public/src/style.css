@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: white;
+  color: black;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: start;
+
+  @media (min-width: 480px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &__child {
+    background-color: gray;
+  }
+}
+
+.faq {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+
+  &__question {
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 768px) {
+    &__question {
+      font-size: 1rem;
+    }
+  
+    padding: 1rem;
+  }
+}
+
+.main-form {
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,20 @@
+[package]
+name = "rusty-barn"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = {version = "0.7.5", features = ["multipart", "http2"]}
+tokio = {version = "1.37.0", features = ["full"]}
+dotenv = "0.15.0"
+serde = {version="1.0.201", features=["derive"]}
+serde_json = "1.0.117"
+tower-http = {version = "0.5.2", features = ["full"]}
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+anyhow = "1.0.86"
+time = {version = "0.3.36", features = ["serde", "formatting"]}
+tera = "1.20.0"
+lazy_static = "1.4.0"
