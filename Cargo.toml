@@ -18,3 +18,4 @@ anyhow = "1.0.86"
 time = {version = "0.3.36", features = ["serde", "formatting"]}
 tera = "1.20.0"
 lazy_static = "1.4.0"
+image = "0.25.1"

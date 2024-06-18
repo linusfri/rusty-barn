@@ -12,7 +12,7 @@ let
   };
 
   devDeps = buildDeps // {
-    inherit (pkgs) rustup;
+    # inherit (pkgs) rustup;
     inherit (pkgs) cargo-watch;
     inherit (pkgs) gh;
   };
@@ -38,11 +38,12 @@ in
       # NGINX_PORT = 8081;
     };
 
-    languages = {
-      rust = {
-        enable = true;
-      };
-    };
+    # languages = {
+    #   rust = {
+    #     enable = true;
+    #     channel = "nixpkgs";
+    #   };
+    # };
 
     containerDeps = pkgs.buildEnv {
       name = "container-env";
@@ -60,7 +61,7 @@ in
     # scripts.deploy.exec = "./scripts/deploy.sh";
 
     processes = {
-      app.exec = "cargo watch -x run";
+      app.exec = "cargo run";
     };
 
     certificates = [
@@ -82,6 +83,9 @@ in
           root ${config.env.DEVENV_ROOT}/public;
           index index.php index.html index.htm;
           server_name ${config.env.NGINX_HOST};
+          client_max_body_size 64m;
+
+          proxy_read_timeout 300;
 
           error_page 497 https://$server_name:$server_port$request_uri;
 

@@ -7,9 +7,14 @@
         <h4>Form submitted!</h4>
     {% endif %}
     
+    <div>
+        {% if img %}
+            <img src="{{ img }}" alt="">
+        {% endif %}
+    </div>
 
-    <form class="main-form" action="/hej" method="POST">
-        <input type="text" name="name" placeholder="Skriv namn">
+    <form class="main-form" action="/img" method="POST" enctype="multipart/form-data">
+        <input type="file" multiple name="file" placeholder="Ladda upp fil">
         <button type="submit">Submit</button>
     </form>
 
