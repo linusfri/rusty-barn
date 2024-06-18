@@ -61,7 +61,7 @@ in
     # scripts.deploy.exec = "./scripts/deploy.sh";
 
     processes = {
-      app.exec = "cargo run";
+      app.exec = "cargo build --release; ./target/release/rusty-barn";
     };
 
     certificates = [

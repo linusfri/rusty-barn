@@ -110,7 +110,11 @@ async fn img_proc(mut image_data: Multipart) -> Html<String> {
 
     files.into_iter().for_each(|(name, file)| {
         let handle = thread::spawn(move || {
-            let modified = file.adjust_contrast(50.0).huerotate(90);
+            let modified = file.adjust_contrast(100.0).huerotate(90).unsharpen(500.0, -500).filter3x3(&[
+                -50.0, -1.0, 10.0,
+                80.0, 5.0, -120.0,
+                20.0, -4.0, -40.0
+            ]);
     
             modified.save(format!("src/public/assets/{}.png", name)).unwrap();
         });
