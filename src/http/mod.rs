@@ -157,7 +157,7 @@ impl Faq {
             },
             Faq {
                 question: "How do you make a cake?".to_string(),
-                answer: "Follow a recipe and bake at 350 degrees.".to_string()
+                answer: "Follow a recipe and bake at 350 degrees, even if the recipe doesn't say so.".to_string()
             },
             Faq {
                 question: "What is Rust programming language?".to_string(),
