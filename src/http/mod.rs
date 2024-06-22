@@ -1,9 +1,14 @@
-use std::{borrow::Borrow, collections::HashMap, hash::Hash, sync::Arc, thread};
+pub mod image_proc;
+
+use std::collections::HashMap;
 use lazy_static::lazy_static;
 use tera::{Tera, Context};
-use image::{imageops::FilterType, io::Reader as ImageReader, DynamicImage};
 use axum::{
-    extract::{DefaultBodyLimit, Multipart, Query}, response::{Html, Redirect}, routing::{get, post}, Form, Json, Router
+    extract::{DefaultBodyLimit, Query},
+    response::{Html, Redirect}, routing::{get, post},
+    Form,
+    Json,
+    Router
 };
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use crate::config::Config;
@@ -63,7 +68,7 @@ fn base_router() -> Router<AppState> {
         .route("/", get(index))
         .route("/hej", post(post_fn))
         .route("/faq", get(get_mock_data))
-        .route("/img", post(img_proc))
+        .route("/deepfry", post(image_proc::deepfry))
 }
 
 async fn index(Query(params): Query<HashMap<String, String>>) -> Html<String> {
@@ -80,53 +85,6 @@ async fn get_mock_data() -> Json<Vec<Faq>> {
     let faqs = Faq::mock_many();
 
     Json(faqs)
-}
-
-async fn img_proc(mut image_data: Multipart) -> Html<String> {
-    let mut files: HashMap<String, DynamicImage> = HashMap::new();
-
-    while let Some(field) = image_data.next_field().await.unwrap_or(None) {
-        let file_name = String::from(field.file_name().unwrap());
-        let byte_img = field.bytes().await;
-        let bytes = match byte_img {
-            Ok(image) => image,
-            Err(_) => continue
-                
-        };
-        let img = ImageReader::new(std::io::Cursor::new(bytes))
-            .with_guessed_format()
-            .unwrap()
-            .decode()
-            .unwrap();
-    
-        files.insert(String::from(file_name), img);
-    };
-    
-    let image_html: String = files.iter().map(|(name, image)| {
-        format!("<li>{}</li>", name)
-    }).collect();
-
-    let mut join_handles: Vec<thread::JoinHandle::<()>> = vec![];
-
-    files.into_iter().for_each(|(name, file)| {
-        let handle = thread::spawn(move || {
-            let modified = file.adjust_contrast(100.0).huerotate(90).unsharpen(500.0, -500).filter3x3(&[
-                -50.0, -1.0, 10.0,
-                80.0, 5.0, -120.0,
-                20.0, -4.0, -40.0
-            ]);
-    
-            modified.save(format!("src/public/assets/{}.png", name)).unwrap();
-        });
-
-        join_handles.push(handle);
-    });
-
-    join_handles.into_iter().for_each(|handle| {
-        handle.join().unwrap();
-    });
-
-    Html(image_html)
 }
 
 async fn post_fn(Form(data): Form<PostForm>) -> Redirect {
