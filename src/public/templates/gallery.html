@@ -1,0 +1,7 @@
+{% include "parts/head.html" %}
+    <div class="grid-gallery">
+        {% for img in images %}
+            <img src="{{ img }}" alt="">
+        {% endfor %}
+    </div>
+{% include "parts/footer.html" %}

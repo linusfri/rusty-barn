@@ -1,7 +1,9 @@
 pub mod image_proc;
 pub mod about;
+pub mod error;
 
 use std::collections::HashMap;
+use error::AppResult;
 use lazy_static::lazy_static;
 use tera::{Tera, Context};
 use axum::{
@@ -67,14 +69,27 @@ fn base_router() -> Router<AppState> {
         .route("/", get(index))
         .route("/about", get(about::get_mock_data))
         .route("/deepfry", post(image_proc::deepfry))
+        .route("/gallery", get(gallery))
+        .route("/upload", post(image_proc::upload))
 }
 
-async fn index(Query(params): Query<HashMap<String, String>>) -> Html<String> {
+async fn index(Query(params): Query<HashMap<String, String>>) -> AppResult<Html<String>> {
     let mut context = Context::new();
 
     context.insert("params", &params);
 
-    TEMPLATES.render("index.html", &context)
-        .map(|s| Html(s))
-        .unwrap()
+    Ok(TEMPLATES.render("index.html", &context)
+        .map(|s| Html(s))?
+    )
+
+}
+
+async fn gallery() -> AppResult<Html<String>> {
+    let mut context = Context::new();
+    let files = image_proc::get_uploaded_image_uris().await?;
+    context.insert("images", &files);
+
+    Ok(TEMPLATES.render("gallery.html", &context)
+        .map(|s| Html(s))?
+    )
 }

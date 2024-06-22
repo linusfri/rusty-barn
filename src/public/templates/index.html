@@ -1,23 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
 {% include "parts/head.html" %}
-<body>
+
     <h1>Hej</h1>
     {% if params.form_submit %}
         <h4>Form submitted!</h4>
     {% endif %}
-    
-    <div>
+
+    <div class="grid-gallery">
         {% if img %}
             <img src="{{ img }}" alt="">
         {% endif %}
     </div>
 
+    <h3>Deepfry</h3>
     <form class="main-form" action="/deepfry" method="POST" enctype="multipart/form-data">
         <input type="file" multiple name="file" placeholder="Ladda upp fil">
         <button type="submit">Submit</button>
     </form>
 
+    <h3>Regular upload</h3>
+    <form class="main-form" action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" multiple name="file" placeholder="Ladda upp fil">
+        <button type="submit">Submit</button>
+    </form>
+
     <div id="modal"></div>
-</body>
-</html>
+
+{% include "parts/footer.html" %}
