@@ -22,7 +22,7 @@ export function App() {
     const [faqs, setFaqs] = useState<Faq[]>([]);
 
     async function getFaqs() {
-        const res = await Axios.get<Faq[]>('https://rustybarn.local:4430/faq')
+        const res = await Axios.get<Faq[]>('https://rustybarn.local:4430/about')
 
         setFaqs(res.data);
     }

@@ -66,8 +66,7 @@ pub async fn serve(config: Config, state: Option<AppState>) {
 fn base_router() -> Router<AppState> {
     Router::new()
         .route("/", get(index))
-        .route("/hej", post(post_fn))
-        .route("/faq", get(get_mock_data))
+        .route("/about", get(get_mock_data))
         .route("/deepfry", post(image_proc::deepfry))
 }
 
@@ -85,13 +84,6 @@ async fn get_mock_data() -> Json<Vec<Faq>> {
     let faqs = Faq::mock_many();
 
     Json(faqs)
-}
-
-async fn post_fn(Form(data): Form<PostForm>) -> Redirect {
-    let mut context = Context::new();
-    context.insert("data", &data);
-
-    Redirect::to("/?form_submit=true")
 }
 
 #[derive(serde::Deserialize, serde::Serialize)]
